@@ -10,7 +10,7 @@ module.exports = {
     discord: {
         token: process.env.DISCORD_TOKEN,
         guildId: process.env.DISCORD_GUILD_ID || "GUILD_ID",
-        channelName: process.env.DISCORD_CHANNEL_NAME || "status"
+        channelId: process.env.DISCORD_CHANNEL_ID || "984983395538960384"
     },
 
     // Monitoring interval in milliseconds (60 seconds)

@@ -23,6 +23,26 @@ async function getGuild(client, guildId) {
 }
 
 /**
+ * Get a channel by ID
+ * @param {import('discord.js').Client} client - Discord client
+ * @param {string} channelId - Channel ID
+ * @returns {Promise<import('discord.js').TextChannel|null>} Channel or null
+ */
+async function getChannelById(client, channelId) {
+    try {
+        const channel = await client.channels.fetch(channelId);
+        if (!channel || channel.type !== ChannelType.GuildText) {
+            logger.error(`[Discord] Channel ${channelId} is not a text channel`);
+            return null;
+        }
+        return channel;
+    } catch (error) {
+        logger.error(`[Discord] Failed to fetch channel ${channelId}: ${error.message}`);
+        return null;
+    }
+}
+
+/**
  * Find a channel by name in a guild
  * @param {import('discord.js').Guild} guild - Discord guild
  * @param {string} channelName - Channel name to find
@@ -196,6 +216,7 @@ async function getLastBotMessage(channel, botId) {
 
 module.exports = {
     getGuild,
+    getChannelById,
     findChannelByName,
     createChannel,
     getOrCreateChannel,

@@ -196,15 +196,11 @@ client.once(Events.ClientReady, async (readyClient) => {
         }
         logger.info(`[Bot] Connected to guild: ${guild.name}`);
         
-        // Get or create the monitoring channel
-        const channel = await discordService.getOrCreateChannel(
-            guild,
-            config.discord.channelName,
-            CHANNEL_CONFIG.MONITOR_CHANNEL
-        );
+        // Get the monitoring channel by ID
+        const channel = await discordService.getChannelById(client, config.discord.channelId);
         
         if (!channel) {
-            logger.error('[Bot] Could not find or create monitoring channel.');
+            logger.error('[Bot] Could not find monitoring channel. Check DISCORD_CHANNEL_ID.');
             return;
         }
         logger.info(`[Bot] Using channel: #${channel.name} (${channel.id})`);
