@@ -142,6 +142,7 @@ function buildStatusEmbed(results) {
     const embed = new EmbedBuilder()
         .setTitle(`${EMOJI.DATABASE} MongoDB Monitor Dashboard`)
         .setDescription(getOverallStatus(results))
+        .setImage("https://cdn.discordapp.com/attachments/909355700453511199/1463903773444280340/0f77c13e-17e6-4099-91e6-a7e31c103080.png?ex=69738621&is=697234a1&hm=3f8030239ea65e8283bb9a1bdbf90bd67ac433c7422dfec4cab4948f0c668992&")
         .setColor(getStatusColor(results))
         .setTimestamp();
     
