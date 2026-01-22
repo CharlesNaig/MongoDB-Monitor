@@ -1,0 +1,27 @@
+{
+  "name": "mongo-monitor-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for PM2-like MongoDB monitoring",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:bot": "node src/bot.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [
+    "discord",
+    "mongodb",
+    "monitor",
+    "bot"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "mongodb": "^6.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
