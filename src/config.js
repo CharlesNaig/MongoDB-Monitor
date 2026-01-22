@@ -10,7 +10,7 @@ module.exports = {
     discord: {
         token: process.env.DISCORD_TOKEN,
         guildId: process.env.DISCORD_GUILD_ID || "GUILD_ID",
-        channelName: process.env.DISCORD_CHANNEL_NAME || "mongo-monitor"
+        channelName: process.env.DISCORD_CHANNEL_NAME || "status"
     },
 
     // Monitoring interval in milliseconds (60 seconds)
@@ -20,13 +20,13 @@ module.exports = {
     // Add or remove instances as needed
     mongodbInstances: [
         {
-            name: "Main-DB",
+            name: "Naig Database",
             uri: process.env.MONGODB_MAIN_URI || "mongodb://user:pass@localhost:27017/admin",
             authSource: "admin",
             timeoutMS: 5000
         },
         {
-            name: "Backup-DB",
+            name: "TamTap Database",
             uri: process.env.MONGODB_BACKUP_URI || "mongodb://user:pass@localhost:27018/admin",
             authSource: "admin",
             timeoutMS: 5000

@@ -125,10 +125,35 @@ async function runMonitoringLoop(channel) {
 }
 
 /**
+ * Find existing monitoring message from the bot in the channel
+ */
+async function findExistingMonitorMessage(channel, botId) {
+    try {
+        const messages = await channel.messages.fetch({ limit: 50 });
+        const botMessage = messages.find(m => 
+            m.author.id === botId && 
+            m.embeds.length > 0 && 
+            m.embeds[0].title?.includes('MongoDB Monitor')
+        );
+        return botMessage || null;
+    } catch (error) {
+        logger.warn(`[Monitor] Could not fetch existing messages: ${error.message}`);
+        return null;
+    }
+}
+
+/**
  * Start the monitoring service
  */
 async function startMonitoring(channel) {
     logger.info('[Monitor] Starting monitoring service...');
+    
+    // Try to find an existing monitoring message to reuse
+    const existingMessage = await findExistingMonitorMessage(channel, client.user.id);
+    if (existingMessage) {
+        monitorMessage = existingMessage;
+        logger.info(`[Monitor] Found existing monitoring message (${existingMessage.id}), will reuse it`);
+    }
     
     // Run immediately on start
     await runMonitoringLoop(channel);
