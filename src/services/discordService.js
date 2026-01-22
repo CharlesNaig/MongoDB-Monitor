@@ -7,6 +7,17 @@ const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const logger = require('../utils/logger');
 
 /**
+ * Supported channel types for monitoring
+ */
+const SUPPORTED_CHANNEL_TYPES = [
+    ChannelType.GuildText,           // Normal text channel
+    ChannelType.GuildAnnouncement,   // Announcement channel
+    ChannelType.PublicThread,        // Public thread
+    ChannelType.PrivateThread,       // Private thread
+    ChannelType.AnnouncementThread   // Announcement thread
+];
+
+/**
  * Get a guild by ID
  * @param {import('discord.js').Client} client - Discord client
  * @param {string} guildId - Guild ID
@@ -23,18 +34,51 @@ async function getGuild(client, guildId) {
 }
 
 /**
- * Get a channel by ID
+ * Check if a channel type is supported for monitoring
+ * @param {number} channelType - Channel type
+ * @returns {boolean} Whether the channel type is supported
+ */
+function isSupportedChannelType(channelType) {
+    return SUPPORTED_CHANNEL_TYPES.includes(channelType);
+}
+
+/**
+ * Get channel type name for logging
+ * @param {number} channelType - Channel type
+ * @returns {string} Human-readable channel type name
+ */
+function getChannelTypeName(channelType) {
+    const typeNames = {
+        [ChannelType.GuildText]: 'Text Channel',
+        [ChannelType.GuildAnnouncement]: 'Announcement Channel',
+        [ChannelType.PublicThread]: 'Public Thread',
+        [ChannelType.PrivateThread]: 'Private Thread',
+        [ChannelType.AnnouncementThread]: 'Announcement Thread'
+    };
+    return typeNames[channelType] || 'Unknown';
+}
+
+/**
+ * Get a channel by ID (supports text, announcement, and thread channels)
  * @param {import('discord.js').Client} client - Discord client
  * @param {string} channelId - Channel ID
- * @returns {Promise<import('discord.js').TextChannel|null>} Channel or null
+ * @returns {Promise<import('discord.js').TextBasedChannel|null>} Channel or null
  */
 async function getChannelById(client, channelId) {
     try {
         const channel = await client.channels.fetch(channelId);
-        if (!channel || channel.type !== ChannelType.GuildText) {
-            logger.error(`[Discord] Channel ${channelId} is not a text channel`);
+        
+        if (!channel) {
+            logger.error(`[Discord] Channel ${channelId} not found`);
             return null;
         }
+        
+        if (!isSupportedChannelType(channel.type)) {
+            logger.error(`[Discord] Channel ${channelId} is not a supported type. Supported: Text, Announcement, Thread`);
+            return null;
+        }
+        
+        logger.info(`[Discord] Found channel: ${getChannelTypeName(channel.type)}`);
         return channel;
     } catch (error) {
         logger.error(`[Discord] Failed to fetch channel ${channelId}: ${error.message}`);
